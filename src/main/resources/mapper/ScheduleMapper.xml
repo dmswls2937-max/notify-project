@@ -116,4 +116,5 @@
         AND alarm_datetime IS NOT NULL
         AND alarm_datetime <![CDATA[<=]]> NOW()
     </select>
+
 </mapper>
