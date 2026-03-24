@@ -1,0 +1,28 @@
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# build
+target/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+
+# env
+.env

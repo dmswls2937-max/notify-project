@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.notify.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="User">
+        <id property="userId" column="user_id"/>
+        <result property="email" column="email"/>
+        <result property="passwordHash" column="password_hash"/>
+        <result property="name" column="name"/>
+        <result property="emailVerifiedYn" column="email_verified_yn"/>
+        <result property="useYn" column="use_yn"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findByEmail" resultMap="UserResultMap">
+        SELECT user_id, email, password_hash, name, email_verified_yn, use_yn, created_at, updated_at
+        FROM users
+        WHERE email = #{email}
+          AND use_yn = 'Y'
+    </select>
+
+    <select id="findById" resultMap="UserResultMap">
+        SELECT user_id, email, password_hash, name, email_verified_yn, use_yn, created_at, updated_at
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO users (
+            email,
+            password_hash,
+            name,
+            email_verified_yn,
+            use_yn
+        ) VALUES (
+            #{email},
+            #{passwordHash},
+            #{name},
+            #{emailVerifiedYn},
+            #{useYn}
+        )
+    </insert>
+</mapper>

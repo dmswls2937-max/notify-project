@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.notify.mapper.ScheduleMapper">
+
+    <resultMap id="scheduleResultMap" type="com.notify.domain.Schedule">
+        <id property="scheduleId" column="schedule_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="startDatetime" column="start_datetime"/>
+        <result property="endDatetime" column="end_datetime"/>
+        <result property="alarmDatetime" column="alarm_datetime"/>
+        <result property="alarmSentYn" column="alarm_sent_yn"/>
+        <result property="alarmSentAt" column="alarm_sent_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findByUserId" parameterType="long" resultMap="scheduleResultMap">
+        SELECT
+        schedule_id,
+        user_id,
+        title,
+        content,
+        start_datetime,
+        end_datetime,
+        alarm_datetime,
+        alarm_sent_yn,
+        alarm_sent_at,
+        created_at,
+        updated_at
+        FROM schedules
+        WHERE user_id = #{userId}
+        ORDER BY start_datetime ASC
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="scheduleResultMap">
+        SELECT
+        schedule_id,
+        user_id,
+        title,
+        content,
+        start_datetime,
+        end_datetime,
+        alarm_datetime,
+        alarm_sent_yn,
+        alarm_sent_at,
+        created_at,
+        updated_at
+        FROM schedules
+        WHERE schedule_id = #{scheduleId}
+    </select>
+
+    <insert id="insert" parameterType="com.notify.domain.Schedule" useGeneratedKeys="true" keyProperty="scheduleId">
+        INSERT INTO schedules (
+        user_id,
+        title,
+        content,
+        start_datetime,
+        end_datetime,
+        alarm_datetime,
+        alarm_sent_yn,
+        alarm_sent_at,
+        created_at,
+        updated_at
+        ) VALUES (
+        #{userId},
+        #{title},
+        #{content},
+        #{startDatetime},
+        #{endDatetime},
+        #{alarmDatetime},
+        #{alarmSentYn},
+        #{alarmSentAt},
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.notify.domain.Schedule">
+        UPDATE schedules
+        SET
+        title = #{title},
+        content = #{content},
+        start_datetime = #{startDatetime},
+        end_datetime = #{endDatetime},
+        alarm_datetime = #{alarmDatetime},
+        updated_at = NOW()
+        WHERE schedule_id = #{scheduleId}
+        AND user_id = #{userId}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM schedules
+        WHERE schedule_id = #{scheduleId}
+        AND user_id = #{userId}
+    </delete>
+    <select id="findAlarmTargets" resultType="com.notify.domain.Schedule">
+        SELECT
+        schedule_id,
+        user_id,
+        title,
+        content,
+        start_datetime,
+        end_datetime,
+        alarm_datetime,
+        alarm_sent_yn,
+        alarm_sent_at,
+        created_at,
+        updated_at
+        FROM schedules
+        WHERE alarm_sent_yn = 'N'
+        AND alarm_datetime IS NOT NULL
+        AND alarm_datetime <![CDATA[<=]]> NOW()
+    </select>
+</mapper>
