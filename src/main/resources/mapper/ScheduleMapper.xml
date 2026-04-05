@@ -52,6 +52,7 @@
         updated_at
         FROM schedules
         WHERE schedule_id = #{scheduleId}
+        AND user_id = #{userId}
     </select>
 
     <insert id="insert" parameterType="com.notify.domain.Schedule" useGeneratedKeys="true" keyProperty="scheduleId">
@@ -114,7 +115,15 @@
         FROM schedules
         WHERE alarm_sent_yn = 'N'
         AND alarm_datetime IS NOT NULL
-        AND alarm_datetime <![CDATA[<=]]> NOW()
+        AND alarm_datetime <![CDATA[<=]]> #{now}
+        ORDER BY alarm_datetime ASC
     </select>
-
+    <update id="markAlarmSent" parameterType="long">
+        UPDATE schedules
+        SET
+        alarm_sent_yn = 'Y',
+        alarm_sent_at = NOW(),
+        updated_at = NOW()
+        WHERE schedule_id = #{scheduleId}
+    </update>
 </mapper>

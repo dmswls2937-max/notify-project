@@ -65,7 +65,7 @@ public class ScheduleService {
     }
 
     public List<Schedule> getSchedules(Long userId) {
-        return scheduleMapper.findAllByUserId(userId);
+        return scheduleMapper.findByUserId(userId);
     }
 
     public List<Schedule> getAlarmTargets(LocalDateTime now) {
@@ -81,8 +81,11 @@ public class ScheduleService {
         if (request.getEndDatetime() != null && request.getEndDatetime().isBefore(request.getStartDatetime())) {
             throw new IllegalArgumentException("종료일시는 시작일시보다 빠를 수 없습니다.");
         }
-        if (request.getAlarmDatetime() != null && request.getAlarmDatetime().isAfter(request.getStartDatetime())) {
-            throw new IllegalArgumentException("알림일시는 시작일시보다 늦을 수 없습니다.");
+
+        if (request.getAlarmDatetime() != null
+                && request.getEndDatetime() != null
+                && request.getAlarmDatetime().isAfter(request.getEndDatetime())) {
+            throw new IllegalArgumentException("알림일시는 종료일시보다 늦을 수 없습니다.");
         }
     }
 }

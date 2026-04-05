@@ -27,13 +27,22 @@ public class AlarmScheduler {
         LocalDateTime now = LocalDateTime.now();
         List<Schedule> targets = scheduleService.getAlarmTargets(now);
 
+        System.out.println("[SCHEDULER] now=" + now + ", targets=" + targets.size());
+
         for (Schedule schedule : targets) {
-            User user = userMapper.findById(schedule.getUserId());
-            if (user == null) {
-                continue;
+            try {
+                User user = userMapper.findById(schedule.getUserId());
+                if (user == null) {
+                    System.out.println("[SCHEDULER] user not found. scheduleId=" + schedule.getScheduleId());
+                    continue;
+                }
+
+                mailService.sendScheduleAlarm(user, schedule);
+                scheduleService.markAlarmSent(schedule.getScheduleId(), now);
+            } catch (Exception e) {
+                System.out.println("[SCHEDULER ERROR] scheduleId=" + schedule.getScheduleId());
+                e.printStackTrace();
             }
-            mailService.sendScheduleAlarm(user, schedule);
-            scheduleService.markAlarmSent(schedule.getScheduleId(), now);
         }
     }
 }

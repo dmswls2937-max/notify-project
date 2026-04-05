@@ -18,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: your-email@gmail.com
-    password: your-app-password
+    username: dddt87815@gmail.com
+    password: kqqusykovrxdrnpq
     properties:
       mail:
         smtp:
@@ -28,7 +28,7 @@ spring:
             enable: true
 
 mail:
-  enabled: false
+  enabled: true
 
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -39,3 +39,4 @@ mybatis:
 logging:
   level:
     com.notify: debug
+    org.springframework.mail: debug
