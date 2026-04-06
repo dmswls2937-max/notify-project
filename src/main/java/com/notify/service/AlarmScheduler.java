@@ -25,20 +25,23 @@ public class AlarmScheduler {
     @Scheduled(fixedDelay = 60000)
     public void sendAlarmMails() {
         LocalDateTime now = LocalDateTime.now();
-        List<Schedule> targets = scheduleService.getAlarmTargets(now);
+        System.out.println("[SCHEDULER START] now=" + now);
 
-        System.out.println("[SCHEDULER] now=" + now + ", targets=" + targets.size());
+        List<Schedule> targets = scheduleService.getAlarmTargets(now);
+        System.out.println("[SCHEDULER TARGETS] count=" + targets.size());
 
         for (Schedule schedule : targets) {
             try {
+                System.out.println("[SCHEDULER TRY] scheduleId=" + schedule.getScheduleId());
                 User user = userMapper.findById(schedule.getUserId());
                 if (user == null) {
-                    System.out.println("[SCHEDULER] user not found. scheduleId=" + schedule.getScheduleId());
+                    System.out.println("[SCHEDULER SKIP] user not found, scheduleId=" + schedule.getScheduleId());
                     continue;
                 }
 
                 mailService.sendScheduleAlarm(user, schedule);
                 scheduleService.markAlarmSent(schedule.getScheduleId(), now);
+                System.out.println("[SCHEDULER DONE] scheduleId=" + schedule.getScheduleId());
             } catch (Exception e) {
                 System.out.println("[SCHEDULER ERROR] scheduleId=" + schedule.getScheduleId());
                 e.printStackTrace();
