@@ -33,7 +33,7 @@ spring:
             enable: true
 
 mail:
-  enabled: true
+  enabled: false
 
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml
