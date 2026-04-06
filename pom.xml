@@ -12,6 +12,7 @@
     <groupId>com.notify</groupId>
     <artifactId>notify</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>notify</name>
     <description>Notify project - JSP + REST API + MyBatis + Scheduler</description>
 
