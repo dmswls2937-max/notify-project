@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -24,7 +25,8 @@ public class AlarmScheduler {
 
     @Scheduled(fixedDelay = 60000)
     public void sendAlarmMails() {
-        LocalDateTime now = LocalDateTime.now();
+//        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         System.out.println("[SCHEDULER START] now=" + now);
 
         List<Schedule> targets = scheduleService.getAlarmTargets(now);
@@ -42,6 +44,8 @@ public class AlarmScheduler {
                 mailService.sendScheduleAlarm(user, schedule);
                 scheduleService.markAlarmSent(schedule.getScheduleId(), now);
                 System.out.println("[SCHEDULER DONE] scheduleId=" + schedule.getScheduleId());
+
+
             } catch (Exception e) {
                 System.out.println("[SCHEDULER ERROR] scheduleId=" + schedule.getScheduleId());
                 e.printStackTrace();
